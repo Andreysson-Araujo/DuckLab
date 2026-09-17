@@ -1,18 +1,13 @@
-import { Audio } from 'expo-av';
+import { createAudioPlayer } from 'expo-audio';
 
 class AudioEngine {
-  async playSample(sample: any) {
+  playSample(sample: any) {
     try {
-      const { sound } = await Audio.Sound.createAsync(sample);
+      const player = createAudioPlayer(sample);
 
-      await sound.playAsync();
+      player.play();
 
-      sound.setOnPlaybackStatusUpdate((status) => {
-        if (status.isLoaded && status.didJustFinish) {
-          sound.unloadAsync();
-        }
-      });
-
+      console.log('Sample reproduzido');
     } catch (error) {
       console.error('Erro ao reproduzir sample:', error);
     }

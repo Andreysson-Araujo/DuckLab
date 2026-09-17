@@ -7,6 +7,7 @@ type VocalPadProps = {
   name: string;
   number: number;
   sound?: any;
+  onPlay?: () => void;
 };
 
 const padColors = [
@@ -22,22 +23,41 @@ export default function VocalPad({
   name,
   number,
   sound,
+  onPlay,
 }: VocalPadProps) {
 
-  const padColor = padColors[(number - 1) % padColors.length];
+  const padColor =
+    padColors[(number - 1) % padColors.length];
 
   async function handlePress() {
+
     if (!sound) {
-      console.log(`Pad ${number} ainda não possui sample`);
+
+      console.log(
+        `Pad ${number} ainda não possui sample`
+      );
+
       return;
     }
 
     await AudioEngine.playSample(sound);
+
+    if (onPlay) {
+      onPlay();
+    }
   }
 
-  // Pega o nome do arquivo automaticamente
-  const fileName = sound?.toString().split('/').pop()?.split('?')[0];
-  const audioName = fileName?.replace(/\.(wav|mp3|ogg|m4a)$/i, '');
+  const fileName =
+    sound?.toString()
+      .split('/')
+      .pop()
+      ?.split('?')[0];
+
+  const audioName =
+    fileName?.replace(
+      /\.(wav|mp3|ogg|m4a)$/i,
+      ''
+    );
 
   return (
     <Pressable
@@ -69,3 +89,4 @@ export default function VocalPad({
     </Pressable>
   );
 }
+
